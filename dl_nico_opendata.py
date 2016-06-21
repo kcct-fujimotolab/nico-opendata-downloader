@@ -99,6 +99,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-a', '--all', action='store_true')
     parser.add_argument('-t', '--target', nargs='*')
+    parser.add_argument('-o', '--output', default='.')
 
     args = parser.parse_args()
 
@@ -106,6 +107,7 @@ if __name__ == '__main__':
     nico = NicoOpendata(dotenv)
 
     list_paths = flatten(nico.list_paths)
+    output = os.path.abspath(args.output)
 
     if args.all:
         paths = list_paths
@@ -114,4 +116,4 @@ if __name__ == '__main__':
         paths = select_dict(list_paths, args.target)
 
     for key, target in paths.items():
-        nico.download_file(target, output_dir=key)
+        nico.download_file(target, output_dir='{}/{}'.format(output, key))
