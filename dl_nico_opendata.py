@@ -101,6 +101,11 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--target', nargs='*')
     parser.add_argument('-o', '--output', default='.')
 
+    parser_unzip = parser.add_mutually_exclusive_group()
+    parser_unzip.add_argument('--unzip', '--extract', dest='unzip', action='store_true')
+    parser_unzip.add_argument('--no-unzip', '--no-extract', dest='unzip', action='store_false')
+    parser.set_defaults(unzip=True)
+
     args = parser.parse_args()
 
     dotenv = Dotenv(os.path.join(os.path.dirname(__file__), '.env'))
@@ -116,4 +121,4 @@ if __name__ == '__main__':
         paths = select_dict(list_paths, args.target)
 
     for key, target in paths.items():
-        nico.download_file(target, output_dir='{}/{}'.format(output, key))
+        nico.download_file(target, output_dir='{}/{}'.format(output, key), extract=args.unzip)
